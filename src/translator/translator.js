@@ -5,14 +5,15 @@
 // Транслятор
 function Translator(source) {
     // Список переменных
-    this.source = source;   // Транслируемый язык
+    this.source = source;       // Транслируемый язык
     this.strIndex = 0;          // Индекс текущей строки
-    this.Lexemes = [];           // Массив лексем
-    this.Identifiers = [];       // Массив идентификаторов
-    this.Strings = [];           // Массив строк
-    this.Numbers = [];           // Массив чисел
-    this.Errors = [];            // Массив ошибок
-    this.keywords = [       // Таблица ключевых слов
+    this.Lexemes = [];          // Массив лексем
+    this.Identifiers = [];      // Массив идентификаторов
+    this.Strings = [];          // Массив строк
+    this.Numbers = [];          // Массив чисел
+    this.Booleans = [];         // Массив логических выражений
+    this.Errors = [];           // Массив ошибок
+    this.keywords = [           // Таблица ключевых слов
         ['func',1],
         ['main',2],
         ['return',3],
@@ -30,8 +31,10 @@ function Translator(source) {
         ['string',15],
         ['fmt.Print',16],
         ['fmt.Scan',17],
-        ['fmt.Pow',18],
-        ['fmt.Sqrt',19]
+        ['math.Pow',18],
+        ['math.Sqrt',19],
+        ['true',20],
+        ['false',21]
     ];
     this.symbols = [        // Таблица сиволов
         ['{',30,0],
@@ -55,11 +58,9 @@ function Translator(source) {
         [')',35,1],
         ['=',36,0],
         [',',37,0],
-        ['&',39,0]
+        ['&',38,0]
     ];
 
     this.Lexer();   // Лексический анализатор
-    // Синтаксический анализатор - WIP
-    // Генератор кода - WIP
-
+    this.Parser();  // Синтаксический анализатор
 }
