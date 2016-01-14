@@ -74,7 +74,7 @@ function GameScene(engine) {
                     }
             }
 
-            if (engine.controller.keys[87] && collusionDir != "up") { // W
+            if (engine.controller.keys[87] && collusionDir != "top") { // W
                 if(!this.jumping) {
                     this.jumping = true;
                     this.speed.y = -this.jumping_speed;
@@ -86,7 +86,8 @@ function GameScene(engine) {
                     this.speed.x = 0;
                 } else {
                     this.speed.y = 0;
-                    this.jumping = false;
+                    if(collusionDir != "top")
+                        this.jumping = false;
                 }
 
             if(this.speed.x != 0)
@@ -112,8 +113,8 @@ function GameScene(engine) {
         {
             // Basic
             name:"Move platform",
-            x:400,
-            y:200,
+            x:100,
+            y:-300,
             layout:1,
             type:"box",
             width:400,
@@ -167,29 +168,8 @@ function GameScene(engine) {
         },
         {
             // Basic
-            name:"platform",
-            x:-10000,
-            y:camera.height+50,
-            type:"box",
-            width:100000,
-            height:10,
-
-            update:function(dt) {
-
-            },
-            draw:function() {
-                engine.graphicsScene.context.fillStyle = 'rgba(0,0,0,1)';
-                engine.graphicsScene.context.fillRect(
-                    this.x - camera.x,
-                    this.y - camera.y,
-                    this.width, this.height
-                );
-            }
-        },
-        {
-            // Basic
             name:"platform2",
-            x:0,
+            x:15,
             y:-10,
             type:"box",
             width:100000,
