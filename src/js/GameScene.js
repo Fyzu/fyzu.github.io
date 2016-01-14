@@ -36,8 +36,8 @@ function GameScene(engine) {
      */
     var player = {
         // Basic
-        x:camera.width/2,
-        y:camera.height,
+        x:0,
+        y:0,
         width:10,
         height:50,
 
@@ -45,27 +45,56 @@ function GameScene(engine) {
             x:0,
             y:0
         },
-        max_speed:5,
-        acceleration:2,
+        max_speed:0.5,
+        acceleration:0.001,
+        jumping:false,
+        jumping_speed:0.5,
 
         update:function(dt) {
-            if(engine.controller.keys[65]) { // A
-                this.x -= this.max_speed / 10 * dt;
-            } else if (engine.controller.keys[68]) { // D
-                this.x += this.max_speed / 10 * dt;
-            } else {
+            var collusionDir = PhysicsEngine.collusionCheck(this, objects);
 
+            if(engine.controller.keys[68] && collusionDir != "left") { // A
+                if(this.speed.x > this.max_speed) {
+                    this.speed.x = this.max_speed;
+                } else {
+                    this.speed.x += this.acceleration * dt;
+                }
+            } else if (engine.controller.keys[65] && collusionDir != "right") { // D
+                if(this.speed.x < -this.max_speed) {
+                    this.speed.x = -this.max_speed;
+                } else {
+                    this.speed.x -= this.acceleration * dt;
+                }
+            } else {
+                if(this.speed.x != 0)
+                    if(Math.abs(this.speed.x) < this.acceleration) {
+                        this.speed.x = 0;
+                    } else {
+                        this.speed.x += -Math.sin(this.speed.x) * this.acceleration * dt * 5;
+                    }
             }
 
-            if (engine.controller.keys[87]) { // W
-
-            } else if (engine.controller.keys[83]) { // S
-
-            } else {
-
+            if (engine.controller.keys[87] && collusionDir != "up") { // W
+                if(!this.jumping) {
+                    this.jumping = true;
+                    this.speed.y = -this.jumping_speed;
+                }
             }
 
-            //PhysicsEngine.moveToDirection(player, objects, time);*/
+            if(collusionDir != null)
+                if(collusionDir == "left" || collusionDir == "right") {
+                    this.speed.x = 0;
+                } else {
+                    this.speed.y = 0;
+                    this.jumping = false;
+                }
+
+            if(this.speed.x != 0)
+                this.x += this.speed.x * dt;
+
+            this.y += this.speed.y * dt;
+            this.speed.y += 0.00098 * dt;
+
         },
         draw:function() {
             engine.graphicsScene.context.fillStyle = 'rgba(255,0,0,1)';
@@ -73,7 +102,7 @@ function GameScene(engine) {
                 this.x - camera.x,
                 this.y - camera.y,
                 this.width, this.height
-            )
+            );
         }
     };
 
@@ -82,7 +111,7 @@ function GameScene(engine) {
     var objects = [
         {
             // Basic
-            name:"platform",
+            name:"Move platform",
             x:400,
             y:200,
             layout:1,
@@ -112,7 +141,124 @@ function GameScene(engine) {
                     this.x - camera.x,
                     this.y - camera.y,
                     this.width, this.height
-                )
+                );
+            }
+        },
+        {
+            // Basic
+            name:"platform",
+            x:-10000,
+            y:50,
+            type:"box",
+            width:100000,
+            height:10,
+
+            update:function(dt) {
+
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,0,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
+            }
+        },
+        {
+            // Basic
+            name:"platform",
+            x:-10000,
+            y:camera.height+50,
+            type:"box",
+            width:100000,
+            height:10,
+
+            update:function(dt) {
+
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,0,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
+            }
+        },
+        {
+            // Basic
+            name:"platform2",
+            x:0,
+            y:-10,
+            type:"box",
+            width:100000,
+            height:10,
+
+            update:function(dt) {
+
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,0,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
+            }
+        },
+        {
+            name:"box1",
+            x:100,
+            y:20,
+            type:"box",
+            width:30,
+            height:30,
+            update:function(dt) {
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,255,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
+            }
+        },
+        {
+            name:"box2",
+            x:100,
+            y:-50,
+            type:"box",
+            width:30,
+            height:30,
+            update:function(dt) {
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,255,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
+            }
+        },
+        {
+            name:"box3",
+            x:-100,
+            y:-50,
+            type:"box",
+            width:30,
+            height:30,
+            update:function(dt) {
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,255,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
             }
         }
     ];
@@ -128,6 +274,11 @@ function GameScene(engine) {
             // Отрисовка только видимых объектов (в фокусе камеры)
             if(object.x + object.width > camera.x && object.x < camera.x + camera.width) {
                 object.draw();
+                if(engine.showInfo) {
+                    engine.graphicsScene.context.fillStyle = 'black';
+                    engine.graphicsScene.context.font = 'bold 10pt monospace';
+                    engine.graphicsScene.context.fillText(object.name, object.x - camera.x, object.y - camera.y - 10);
+                }
             }
         });
 
@@ -137,9 +288,11 @@ function GameScene(engine) {
         if (engine.showInfo) {
             engine.graphicsScene.context.fillStyle = 'black';
             engine.graphicsScene.context.font = 'bold 10pt monospace';
+            engine.graphicsScene.context.fillText('Current scene: ' + states.currentScene, camera.width/2.2, 10);
             engine.graphicsScene.context.fillText('Camera(' + camera.x + ', ' + camera.y + ')', 10, 60);
             engine.graphicsScene.context.fillText('Player(' + player.x + ', ' + player.y + ')', 10, 20);
             engine.graphicsScene.context.fillText('Speed(' + player.speed.x + ', ' + player.speed.y + ')', 10, 40);
+            engine.graphicsScene.context.fillText('player', player.x - camera.x + player.width/2 - 20, player.y - camera.y - 10);
         }
     };
 }

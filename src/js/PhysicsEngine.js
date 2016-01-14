@@ -22,5 +22,39 @@ var PhysicsEngine = {
 
         if(move)
             that.x += that.directionVector.x * that.mov_speed * time;
+    },
+    collusionCheck:function(that, objects) {
+        var result = null;
+
+        $.each(objects, function(index, object) {
+            var vX = (that.x + (that.width/2)) - (object.x + (object.width/2)),
+                vY = (that.y + (that.height/2)) - (object.y + (object.height/2)),
+                hWidths = (that.width/2) + (object.width/2),
+                hHeights = (that.height/2) + (object.height/2),
+                oX = hWidths - Math.abs(vX),
+                oY = hHeights - Math.abs(vY);
+
+            if(Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
+                if (oX >= oY) {
+                    if (vY > 0) {
+                        result = "top";
+                        that.y += oY;
+                    } else {
+                        result = "back";
+                        that.y -= oY;
+                    }
+                } else {
+                    if (vX > 0) {
+                        result = "left";
+                        that.x += oX;
+                    } else {
+                        result = "right";
+                        that.x -= oX;
+                    }
+                }
+            }
+        });
+
+        return result;
     }
 };
