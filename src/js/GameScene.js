@@ -36,7 +36,7 @@ function GameScene(engine) {
      */
     var player = {
         // Basic
-        x:0,
+        x:-30,
         y:0,
         width:10,
         height:50,
@@ -111,7 +111,6 @@ function GameScene(engine) {
     // TODO: Сделать подгружаемые объекты, а не хардкод
     var objects = [
         {
-            // Basic
             name:"Move platform",
             x:100,
             y:-300,
@@ -119,14 +118,12 @@ function GameScene(engine) {
             type:"box",
             width:400,
             height:10,
+
             directionVector:{
                 x:0,
                 y:1
             },
-
-            // storage
             moveTime:0,
-
             update:function(dt) {
                 this.moveTime += dt;
                 if(this.moveTime < 1000) {
@@ -146,8 +143,7 @@ function GameScene(engine) {
             }
         },
         {
-            // Basic
-            name:"platform",
+            name:"platform1",
             x:-10000,
             y:50,
             type:"box",
@@ -167,13 +163,32 @@ function GameScene(engine) {
             }
         },
         {
-            // Basic
             name:"platform2",
             x:15,
             y:-10,
             type:"box",
             width:100000,
             height:10,
+
+            update:function(dt) {
+
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,0,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
+            }
+        },
+        {
+            name:"platform3",
+            x:-200,
+            y:-200,
+            type:"box",
+            width:10,
+            height:100000,
 
             update:function(dt) {
 
@@ -227,6 +242,24 @@ function GameScene(engine) {
             name:"box3",
             x:-100,
             y:-50,
+            type:"box",
+            width:30,
+            height:30,
+            update:function(dt) {
+            },
+            draw:function() {
+                engine.graphicsScene.context.fillStyle = 'rgba(0,255,0,1)';
+                engine.graphicsScene.context.fillRect(
+                    this.x - camera.x,
+                    this.y - camera.y,
+                    this.width, this.height
+                );
+            }
+        },
+        {
+            name:"box3",
+            x:-170,
+            y:-100,
             type:"box",
             width:30,
             height:30,
