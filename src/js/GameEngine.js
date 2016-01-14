@@ -15,7 +15,7 @@ var GameEngine = (function () {
     // Рендер фрейма
     GameEngine.prototype.render = function () {
 
-        this.gameScene.context.clearRect(0, 0, this.gameScene.canvas.width, this.gameScene.canvas.height);
+        this.graphicsScene.context.clearRect(0, 0, this.graphicsScene.canvas.width, this.graphicsScene.canvas.height);
 
         var currentRenderDate = new Date().getTime();
 
